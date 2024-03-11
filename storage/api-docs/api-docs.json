@@ -1,0 +1,2243 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "News project API",
+        "version": "1"
+    },
+    "paths": {
+        "/admin/users": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Display a listing of the users",
+                "description": "Display a paginated list of all users, or search for users with a name or email that contains the search parameter",
+                "operationId": "index",
+                "parameters": [
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search parameter",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/admin/users/{id}": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get user by ID",
+                "description": "Returns a single user with their favourite items and comments, identified by their ID.",
+                "operationId": "getUserById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "UUID of the user to fetch",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uudi"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/User"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/admin/users/{id}/favourites": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Retrieve a user's favourites",
+                "description": "Retrieve a paginated list of a user's favourite items, filtered by user ID and ordered by creation date in descending order.",
+                "operationId": "f968d130fbfc09a7e855283659ea021b",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The UUID of the user whose favourites to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "favourites": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/UserFavourite"
+                                            }
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "perPage": {
+                                            "type": "integer",
+                                            "example": 7
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User not found."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/admin/users/{id}/comments": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get all comments for a user",
+                "description": "Get all comments for the user with the specified ID and paginate them.",
+                "operationId": "5ac3209513caf8093de5cf4bd9a57b6d",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The UUID of the user whose comments to retrieve",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Comments retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "comments": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/UserComment"
+                                            }
+                                        },
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "perPage": {
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/users/{id}/logs": {
+            "get": {
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Retrieve the logs for the specified user ID.",
+                "description": "Retrieve the logs for the specified user ID.",
+                "operationId": "getLogs",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The UUID of the user whose logs to retrieve.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "get": {
+                "tags": [
+                    "Authenticated Session"
+                ],
+                "summary": "Display the login view",
+                "description": "Displays the login view for the user to enter their credentials.",
+                "operationId": "login",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Authenticated Session"
+                ],
+                "summary": "Authenticate the user",
+                "description": "Authenticates the user and creates a session.",
+                "operationId": "authenticate",
+                "requestBody": {
+                    "description": "User credentials",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "302": {
+                        "description": "Redirect"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "tags": [
+                    "Authenticated Session"
+                ],
+                "summary": "Destroy the authenticated session",
+                "description": "Destroys the authenticated session and logs the user out.",
+                "operationId": "logout",
+                "responses": {
+                    "302": {
+                        "description": "Redirect"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/confirm-password": {
+            "get": {
+                "tags": [
+                    "Confirmable Password"
+                ],
+                "summary": "Show the confirm password view",
+                "description": "Returns the confirm password view",
+                "operationId": "confirmPasswordView",
+                "responses": {
+                    "200": {
+                        "description": "Success"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Confirmable Password"
+                ],
+                "summary": "Confirm the user's password",
+                "description": "Confirms the user's password",
+                "operationId": "confirmPassword",
+                "requestBody": {
+                    "description": "Pass user's email and password",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "user@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "success"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The password has been confirmed."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "422": {
+                        "description": "Invalid input"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/email/verification-notification": {
+            "post": {
+                "tags": [
+                    "Email Verification"
+                ],
+                "summary": "Send a new email verification notification",
+                "description": "Send a new email verification notification to the authenticated user.",
+                "operationId": "7c01a354a5960445207bc5d2f17d547e",
+                "responses": {
+                    "302": {
+                        "description": "Redirects to the previous page with a success message.",
+                        "content": {
+                            "text/html": {}
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden error, user has already verified email.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User has already verified email."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/email/verify": {
+            "get": {
+                "tags": [
+                    "Email Verification"
+                ],
+                "summary": "Display the email verification prompt.",
+                "description": "Displays the email verification prompt if the user has not verified their email address yet.",
+                "operationId": "getEmailVerificationPrompt",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EmailVerificationPromptResponse"
+                                }
+                            }
+                        }
+                    },
+                    "302": {
+                        "description": "User has already verified their email",
+                        "headers": {
+                            "Location": {
+                                "description": "Redirects to the intended page",
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Verification"
+                ],
+                "summary": "Mark the authenticated user's email address as verified",
+                "description": "Mark the authenticated user's email address as verified",
+                "operationId": "1b8f267ccce552fda2edd55aab4e1711",
+                "responses": {
+                    "200": {
+                        "description": "Email address has been verified",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Email address has been verified"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Forbidden"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/forgot-password/reset": {
+            "get": {
+                "tags": [
+                    "Password Reset"
+                ],
+                "summary": "Display the password reset view.",
+                "description": "Display the password reset view.",
+                "operationId": "newPasswordCreate",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "query",
+                        "description": "The password reset token.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "The user's email address.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password reset view is displayed.",
+                        "content": {
+                            "text/html": {}
+                        }
+                    },
+                    "404": {
+                        "description": "Token not found or expired.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "This password reset token is invalid or has expired."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/reset-password": {
+            "post": {
+                "tags": [
+                    "Password Reset"
+                ],
+                "summary": "Reset user's password",
+                "operationId": "24b1c68468bf984b8806908f211f3827",
+                "requestBody": {
+                    "description": "User's email, password, password confirmation, and reset token",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "token",
+                                    "email",
+                                    "password",
+                                    "password_confirmation"
+                                ],
+                                "properties": {
+                                    "token": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "format": "password"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "format": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password successfully reset.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "passwords.reset"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid email or token",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "email": "The email field is required.",
+                                                "token": "The token field is required."
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/password/update": {
+            "put": {
+                "tags": [
+                    "Password"
+                ],
+                "summary": "Update the user's password",
+                "description": "Update the authenticated user's password.",
+                "operationId": "73331557b80bf72b8b12e5a5e0ce31c5",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "current_password": {
+                                        "description": "The user's current password.",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "description": "The new password to set for the user.",
+                                        "type": "string"
+                                    },
+                                    "password_confirmation": {
+                                        "description": "Confirmation of the new password.",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Password updated successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "description": "Status message confirming password update.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors occurred.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "The error message.",
+                                            "type": "string"
+                                        },
+                                        "errors": {
+                                            "description": "Validation errors encountered.",
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "array",
+                                                "items": {
+                                                    "description": "The specific error message for this field.",
+                                                    "type": "string"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "User is not authenticated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "description": "The error message.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/forgot-password": {
+            "get": {
+                "tags": [
+                    "Password Reset"
+                ],
+                "summary": "Display the password reset link request view",
+                "description": "Display the password reset link request view.",
+                "operationId": "488381143077833cec81be2e4235c339",
+                "responses": {
+                    "200": {
+                        "description": "Returns the password reset link request view",
+                        "content": {
+                            "text/html": {}
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Password Reset"
+                ],
+                "summary": "Handle an incoming password reset link request",
+                "description": "Handle an incoming password reset link request.",
+                "operationId": "888e4aa5b202b170b9fe831da90048c6",
+                "requestBody": {
+                    "description": "Pass email address for which password reset link is to be sent",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "email"
+                                ],
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "johndoe@example.com"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "302": {
+                        "description": "Returns redirect response with success message",
+                        "content": {
+                            "text/html": {}
+                        }
+                    }
+                }
+            }
+        },
+        "/register": {
+            "get": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Display the registration form.",
+                "description": "Display the registration view.",
+                "operationId": "711394cf638654593b284d884e4c5be4",
+                "responses": {
+                    "200": {
+                        "description": "Show the registration form."
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Handle a registration request.",
+                "description": "Handle an incoming registration request.",
+                "operationId": "573de1fed352c1205a32c4d1b9877375",
+                "requestBody": {
+                    "description": "User registration details.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "Abcdef1!"
+                                    },
+                                    "password_confirmation": {
+                                        "type": "string",
+                                        "example": "Abcdef1!"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "302": {
+                        "description": "Redirect to the home page."
+                    },
+                    "422": {
+                        "description": "Validation error."
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/news": {
+            "get": {
+                "tags": [
+                    "News"
+                ],
+                "summary": "Get all news",
+                "description": "Return a list of all news from various sources with pagination and filtering options",
+                "operationId": "news.index",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Keywords or a phrase to search for in the article title and body",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sources",
+                        "in": "query",
+                        "description": "A comma-seperated string of identifiers for the news sources or blogs you want headlines from",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "exclude_domains",
+                        "in": "query",
+                        "description": "A comma-seperated string of domains (eg bbc.co.uk, techcrunch.com, engadget.com) to remove from the results",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "domains",
+                        "in": "query",
+                        "description": "A comma-seperated string of domains (eg bbc.co.uk, techcrunch.com, engadget.com) to restrict the search to",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "A date and optional time for the oldest article allowed. This should be in ISO 8601 format (e.g. 2018-11-16 or 2018-11-16T16:19:03)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "A date and optional time for the newest article allowed. This should be in ISO 8601 format (e.g. 2018-11-16 or 2018-11-16T16:19:03)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "language",
+                        "in": "query",
+                        "description": "he 2-letter ISO-639-1 code of the language you want to get headlines for",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ar",
+                                "de",
+                                "en",
+                                "es",
+                                "fr",
+                                "he",
+                                "it",
+                                "nl",
+                                "no",
+                                "pt",
+                                "ru",
+                                "se",
+                                "ud",
+                                "zh"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "sort_by",
+                        "in": "query",
+                        "description": "The order to sort the articles in. Use the getSortBy() method to locate these programmatically",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "relevancy",
+                                "popularity",
+                                "publishedAt"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "The number of results to return per page (request). 20 is the default, 100 is the maximum.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 20
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Use this to page through the results if the total results found is greater than the page size.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/News"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/profile": {
+            "get": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Get edit profile view",
+                "description": "Retrieve the edit profile view with data required for the form.",
+                "operationId": "8cfcc99d8d1aa366314cd8abf9cd9c9a",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "user": {
+                                            "$ref": "#/components/schemas/User"
+                                        },
+                                        "allLanguageNames": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string",
+                                                "property": null
+                                            }
+                                        },
+                                        "allCountryNames": {
+                                            "type": "object",
+                                            "additionalProperties": {
+                                                "type": "string",
+                                                "property": null
+                                            }
+                                        },
+                                        "categories": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Update the user's profile information",
+                "description": "Updates the authenticated user's profile information.",
+                "operationId": "updateUserProfile",
+                "requestBody": {
+                    "description": "User's profile information to be updated",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "language": {
+                                        "type": "string"
+                                    },
+                                    "country": {
+                                        "type": "string"
+                                    },
+                                    "categories": {
+                                        "type": "string"
+                                    },
+                                    "current_password": {
+                                        "type": "string"
+                                    },
+                                    "new_password": {
+                                        "type": "string"
+                                    },
+                                    "confirm_password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "302": {
+                        "description": "Redirects to the profile edit page with a success message.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "string",
+                                            "example": "profile-updated"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized action, user is not authenticated.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors in the request."
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Profile"
+                ],
+                "summary": "Delete the user's account.",
+                "description": "Delete the user's account. Requires current user's password.",
+                "operationId": "1d6a5c6489e35a763aa97ebef12863ce",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "password"
+                                ],
+                                "properties": {
+                                    "password": {
+                                        "description": "The current user's password.",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User account has been deleted successfully.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User account has been deleted successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthorized access"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation errors",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "password": [
+                                                    "The current password is invalid."
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Server error occurred while deleting the user's account."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/topHeadlines": {
+            "get": {
+                "tags": [
+                    "Top Headlines"
+                ],
+                "summary": "Get top headlines",
+                "description": "Return a list of top headlines from various sources with pagination and filtering options",
+                "operationId": "topHeadlines.index",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Keywords or a phrase to search for in the article title and body",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "sources",
+                        "in": "query",
+                        "description": "A comma-seperated string of identifiers for the news sources or blogs you want headlines from",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "country",
+                        "in": "query",
+                        "description": "The 2-letter ISO 3166-1 code of the country you want to get headlines for",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ae",
+                                "ar",
+                                "at",
+                                "au",
+                                "be",
+                                "bg",
+                                "br",
+                                "ca",
+                                "ch",
+                                "cn",
+                                "co",
+                                "cu",
+                                "cz",
+                                "de",
+                                "eg",
+                                "fr",
+                                "gb",
+                                "gr",
+                                "hk",
+                                "hu",
+                                "id",
+                                "ie",
+                                "il",
+                                "in",
+                                "it",
+                                "jp",
+                                "kr",
+                                "lt",
+                                "lv",
+                                "ma",
+                                "mx",
+                                "my",
+                                "ng",
+                                "nl",
+                                "no",
+                                "nz",
+                                "ph",
+                                "pl",
+                                "pt",
+                                "ro",
+                                "rs",
+                                "ru",
+                                "sa",
+                                "se",
+                                "sg",
+                                "si",
+                                "sk",
+                                "th",
+                                "tr",
+                                "tw",
+                                "ua",
+                                "us",
+                                "ve",
+                                "za"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "category",
+                        "in": "query",
+                        "description": "The category you want to get headlines for",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "business",
+                                "entertainment",
+                                "general",
+                                "health",
+                                "science",
+                                "sports",
+                                "technology"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "page_size",
+                        "in": "query",
+                        "description": "The number of results to return per page (request). 20 is the default, 100 is the maximum.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 20
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Use this to page through the results if the total results found is greater than the page size.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/TopHeadline"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/comments": {
+            "post": {
+                "tags": [
+                    "User Comments"
+                ],
+                "summary": "Create a new comment",
+                "operationId": "2bb76c44f4ecd00f1b534dcb2166b002",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "commentText",
+                                    "userId",
+                                    "url"
+                                ],
+                                "properties": {
+                                    "commentText": {
+                                        "type": "string"
+                                    },
+                                    "userId": {
+                                        "type": "string"
+                                    },
+                                    "url": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Favourite successfully added",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserFavourite"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/comments/{id}": {
+            "put": {
+                "tags": [
+                    "User Comments"
+                ],
+                "summary": "Update a comment",
+                "operationId": "7c938208a433e11b2016cff65b7cbe25",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "Comment UUID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "commentText"
+                                ],
+                                "properties": {
+                                    "commentText": {
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "302": {
+                        "description": "Comment successfully updated"
+                    },
+                    "404": {
+                        "description": "Comment not found"
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "User Comments"
+                ],
+                "summary": "Delete a comment",
+                "operationId": "67ed10306c4b7e693c78470b400e3748",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "Comment UUID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Comment successfully deleted"
+                    },
+                    "404": {
+                        "description": "Comment not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/comments/{id}/edit": {
+            "get": {
+                "tags": [
+                    "User Comments"
+                ],
+                "summary": "Get the edit view for a comment",
+                "operationId": "7d9d598bd8a6328ca3327279d6178422",
+                "parameters": [
+                    {
+                        "name": "uuid",
+                        "in": "path",
+                        "description": "Comment UUID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Edit view for the comment"
+                    },
+                    "404": {
+                        "description": "Comment not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/favourites": {
+            "get": {
+                "tags": [
+                    "User Favourites"
+                ],
+                "summary": "Get list of user's favourite news",
+                "description": "Returns list of user's favourite news",
+                "operationId": "getFavourites",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "perPage",
+                        "in": "query",
+                        "description": "Number of items per page",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserFavourite"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "404": {
+                        "description": "Not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "User Favourites"
+                ],
+                "summary": "Add a news to user's favourites",
+                "description": "Add a news to user's favourites",
+                "operationId": "addFavourite",
+                "requestBody": {
+                    "description": "Request body for adding a favourite",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/UserFavouriteInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Favourite successfully added",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/UserFavourite"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/favourites/{id}": {
+            "delete": {
+                "tags": [
+                    "User Favourites"
+                ],
+                "summary": "Delete a favourite item",
+                "description": "Deletes a favourite item with the specified ID.",
+                "operationId": "deleteFavourite",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the favourite item to delete",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid",
+                            "example": "a110d11b-176a-4813-8c31-a69f9f50f7fc"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Favourite item successfully deleted"
+                    },
+                    "404": {
+                        "description": "Favourite item not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "EmailVerificationPromptResponse": {
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "example": "success"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Email verification prompt displayed"
+                    }
+                },
+                "type": "object"
+            },
+            "UserFavouriteInput": {
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "example": "My favourite news"
+                    },
+                    "url": {
+                        "type": "string",
+                        "example": "https://example.com/news/123"
+                    },
+                    "author": {
+                        "type": "string",
+                        "example": "John Doe"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "This is my favourite news"
+                    },
+                    "imageUrl": {
+                        "type": "string",
+                        "example": "https://example.com/image.jpg"
+                    },
+                    "userId": {
+                        "type": "string",
+                        "example": "93504d6a-e476-48d8-be86-df361cf2c4bb"
+                    }
+                },
+                "type": "object"
+            },
+            "News": {
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "totalResults": {
+                        "type": "integer"
+                    },
+                    "articles": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "source": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "author": {
+                                    "type": "string"
+                                },
+                                "title": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "urlToImage": {
+                                    "type": "string"
+                                },
+                                "publishedAt": {
+                                    "type": "string"
+                                },
+                                "content": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "TopHeadline": {
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    },
+                    "totalResults": {
+                        "type": "integer"
+                    },
+                    "articles": {
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "source": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "string"
+                                            },
+                                            "name": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                },
+                                "author": {
+                                    "type": "string"
+                                },
+                                "title": {
+                                    "type": "string"
+                                },
+                                "description": {
+                                    "type": "string"
+                                },
+                                "url": {
+                                    "type": "string"
+                                },
+                                "urlToImage": {
+                                    "type": "string"
+                                },
+                                "publishedAt": {
+                                    "type": "string"
+                                },
+                                "content": {
+                                    "type": "string"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "User": {
+                "title": "User",
+                "description": "User model",
+                "properties": {
+                    "id": {
+                        "description": "User ID",
+                        "type": "string",
+                        "format": "uuid",
+                        "readOnly": true
+                    },
+                    "name": {
+                        "description": "User name",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "User email",
+                        "type": "string"
+                    },
+                    "country": {
+                        "description": "User country",
+                        "type": "string"
+                    },
+                    "language": {
+                        "description": "User language",
+                        "type": "string"
+                    },
+                    "category": {
+                        "description": "User category",
+                        "type": "string"
+                    },
+                    "role": {
+                        "description": "User role",
+                        "type": "boolean"
+                    },
+                    "created_at": {
+                        "description": "Date and time of user creation",
+                        "type": "timestamp",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updated_at": {
+                        "description": "Date and time of user update",
+                        "type": "timestamp",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "favourites": {
+                        "description": "User's favourite news articles",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UserFavourite"
+                        }
+                    },
+                    "comments": {
+                        "description": "User's comments on news articles",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UserComment"
+                        }
+                    },
+                    "logs": {
+                        "description": "User's logs of activity on the news portal",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UserLog"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "UserComment": {
+                "properties": {
+                    "uuid": {
+                        "type": "string",
+                        "readOnly": true,
+                        "example": "f6ebff50-aa5d-11eb-aebf-0242ac130002"
+                    },
+                    "userUuid": {
+                        "type": "string",
+                        "example": "f6ebff50-aa5d-11eb-aebf-0242ac130002"
+                    },
+                    "url": {
+                        "type": "text",
+                        "example": "https://example.com/article"
+                    },
+                    "commentText": {
+                        "type": "text",
+                        "example": "This is a comment"
+                    },
+                    "created_at": {
+                        "type": "timestamp",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "example": "2023-05-08T12:30:00Z"
+                    },
+                    "updated_at": {
+                        "type": "timestamp",
+                        "format": "date-time",
+                        "readOnly": true,
+                        "example": "2023-05-08T12:30:00Z"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    }
+                },
+                "type": "object"
+            },
+            "UserFavourite": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "readOnly": "true"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "text"
+                    },
+                    "author": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "text"
+                    },
+                    "imageUrl": {
+                        "type": "text"
+                    },
+                    "userId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "created_at": {
+                        "type": "timestamp",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "updated_at": {
+                        "type": "timestamp",
+                        "format": "date-time",
+                        "readOnly": "true"
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    }
+                },
+                "type": "object"
+            },
+            "UserLog": {
+                "title": "UserLog",
+                "description": "User log model",
+                "properties": {
+                    "id": {
+                        "description": "The unique uuid for the log entry",
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "action": {
+                        "description": "The action performed by the user",
+                        "type": "string"
+                    },
+                    "description": {
+                        "description": "The description of the action performed by the user",
+                        "type": "text"
+                    },
+                    "userId": {
+                        "description": "The UUID of the user who performed the action",
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "description": "The date and time when the log entry was created",
+                        "type": "timestamp",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "description": "The date and time when the log entry was last updated",
+                        "type": "timestamp",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Authenticated Session"
+        },
+        {
+            "name": "Confirmable Password"
+        },
+        {
+            "name": "Email Verification"
+        },
+        {
+            "name": "Email Verification",
+            "description": "API endpoints for email verification"
+        },
+        {
+            "name": "Password Reset"
+        },
+        {
+            "name": "Password Reset"
+        },
+        {
+            "name": "News"
+        },
+        {
+            "name": "Top Headlines"
+        },
+        {
+            "name": "User Comments"
+        }
+    ]
+}
