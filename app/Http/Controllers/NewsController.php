@@ -8,133 +8,131 @@ use App\Models\UserComment;
 use Illuminate\Http\Request;
 
 /**
- * @OA\Tag(
- *     name="News",
- * )
- */
-
+    * @OA\Tag(
+    *     name="News",
+    * )
+*/
 class NewsController extends Controller
 {
     /**
-         * @OA\Get(
-         *     path="/news",
-         *     summary="Get all news",
-         *     description="Return a list of all news from various sources with pagination and filtering options",
-         *     operationId="news.index",
-         *     tags={"News"},
-         *     @OA\Parameter(
-         *         name="q",
-         *         in="query",
-         *         description="Keywords or a phrase to search for in the article title and body",
-         *         required=false,
-         *         @OA\Schema(
-         *             type="string"
-         *         )
-         *     ),
-         *     @OA\Parameter(
-         *         name="sources",
-         *         in="query",
-         *         description="A comma-seperated string of identifiers for the news sources or blogs you want headlines from",
-         *         required=false,
-         *         @OA\Schema(
-         *             type="string"
-         *         )
-         *     ),
-         *     @OA\Parameter(
-         *         name="exclude_domains",
-         *         in="query",
-         *         description="A comma-seperated string of domains (eg bbc.co.uk, techcrunch.com, engadget.com) to remove from the results",
-         *         required=false,
-         *         @OA\Schema(
-         *             type="string"
-         *         )
-         *     ),
-         *     @OA\Parameter(
-         *         name="domains",
-         *         in="query",
-         *         description="A comma-seperated string of domains (eg bbc.co.uk, techcrunch.com, engadget.com) to restrict the search to",
-         *         required=false,
-         *         @OA\Schema(
-         *             type="string"
-         *         )
-         *     ),
-         *     @OA\Parameter(
-         *         name="from",
-         *         in="query",
-         *         description="A date and optional time for the oldest article allowed. This should be in ISO 8601 format (e.g. 2018-11-16 or 2018-11-16T16:19:03)",
-         *         required=false,
-         *         @OA\Schema(
-         *             type="string"
-         *         )
-         *     ),
-        *      @OA\Parameter(
-        *          name="to",
-        *          in="query",
-        *          description="A date and optional time for the newest article allowed. This should be in ISO 8601 format (e.g. 2018-11-16 or 2018-11-16T16:19:03)",
-        *          required=false,
-        *          @OA\Schema(
-        *              type="string",
-        *          )
-        *      ),
-        *       @OA\Parameter(
-        *          name="language",
-        *          in="query",
-        *          description="he 2-letter ISO-639-1 code of the language you want to get headlines for",
-        *          required=false,
-        *          @OA\Schema(
-        *              type="string",
-        *              enum={"ar", "de", "en", "es", "fr", "he", "it", "nl", "no", "pt", "ru", "se", "ud", "zh"}
-        *          )
-        *      ),
-        *      @OA\Parameter(
-        *          name="sort_by",
-        *          in="query",
-        *          description="The order to sort the articles in. Use the getSortBy() method to locate these programmatically",
-        *          required=false,
-        *          @OA\Schema(
-        *              type="string",
-        *              enum={"relevancy", "popularity", "publishedAt"}
-        *          )
-        *      ),
-        *      @OA\Parameter(
-        *          name="page_size",
-        *          in="query",
-        *          description="The number of results to return per page (request). 20 is the default, 100 is the maximum.",
-        *          required=false,
-        *          @OA\Schema(
-        *              type="integer",
-        *              default=20
-        *          )
-        *      ),
-        *      @OA\Parameter(
-        *          name="page",
-        *          in="query",
-        *          description="Use this to page through the results if the total results found is greater than the page size.",
-        *          required=false,
-        *          @OA\Schema(
-        *              type="integer",
-        *              default=1
-        *          )
-        *      ),
-        *      @OA\Response(
-        *          response=200,
-        *          description="Successful operation",
-        *          @OA\JsonContent(
-        *              type="array",
-        *              @OA\Items(ref="#/components/schemas/News")
-        *          )
-        *      ),
-        *      @OA\Response(
-        *          response=404,
-        *          description="Not found"
-        *      ),
-        *      @OA\Response(
-        *          response=500,
-        *          description="Internal server error"
-        *      )
-        *  )
-        */
-
+    * @OA\Get(
+    *     path="/news",
+    *     summary="Get all news",
+    *     description="Return a list of all news from various sources with pagination and filtering options",
+    *     operationId="news.index",
+    *     tags={"News"},
+    *     @OA\Parameter(
+    *         name="q",
+    *         in="query",
+    *         description="Keywords or a phrase to search for in the article title and body",
+    *         required=false,
+    *         @OA\Schema(
+    *             type="string"
+    *         )
+    *     ),
+    *     @OA\Parameter(
+    *         name="sources",
+    *         in="query",
+    *         description="A comma-seperated string of identifiers for the news sources or blogs you want headlines from",
+    *         required=false,
+    *         @OA\Schema(
+    *             type="string"
+    *         )
+    *     ),
+    *     @OA\Parameter(
+    *         name="exclude_domains",
+    *         in="query",
+    *         description="A comma-seperated string of domains (eg bbc.co.uk, techcrunch.com, engadget.com) to remove from the results",
+    *         required=false,
+    *         @OA\Schema(
+    *             type="string"
+    *         )
+    *     ),
+    *     @OA\Parameter(
+    *         name="domains",
+    *         in="query",
+    *         description="A comma-seperated string of domains (eg bbc.co.uk, techcrunch.com, engadget.com) to restrict the search to",
+    *         required=false,
+    *         @OA\Schema(
+    *             type="string"
+    *         )
+    *     ),
+    *     @OA\Parameter(
+    *         name="from",
+    *         in="query",
+    *         description="A date and optional time for the oldest article allowed. This should be in ISO 8601 format (e.g. 2018-11-16 or 2018-11-16T16:19:03)",
+    *         required=false,
+    *         @OA\Schema(
+    *             type="string"
+    *         )
+    *     ),
+    *      @OA\Parameter(
+    *          name="to",
+    *          in="query",
+    *          description="A date and optional time for the newest article allowed. This should be in ISO 8601 format (e.g. 2018-11-16 or 2018-11-16T16:19:03)",
+    *          required=false,
+    *          @OA\Schema(
+    *              type="string",
+    *          )
+    *      ),
+    *       @OA\Parameter(
+    *          name="language",
+    *          in="query",
+    *          description="he 2-letter ISO-639-1 code of the language you want to get headlines for",
+    *          required=false,
+    *          @OA\Schema(
+    *              type="string",
+    *              enum={"ar", "de", "en", "es", "fr", "he", "it", "nl", "no", "pt", "ru", "se", "ud", "zh"}
+    *          )
+    *      ),
+    *      @OA\Parameter(
+    *          name="sort_by",
+    *          in="query",
+    *          description="The order to sort the articles in. Use the getSortBy() method to locate these programmatically",
+    *          required=false,
+    *          @OA\Schema(
+    *              type="string",
+    *              enum={"relevancy", "popularity", "publishedAt"}
+    *          )
+    *      ),
+    *      @OA\Parameter(
+    *          name="page_size",
+    *          in="query",
+    *          description="The number of results to return per page (request). 20 is the default, 100 is the maximum.",
+    *          required=false,
+    *          @OA\Schema(
+    *              type="integer",
+    *              default=20
+    *          )
+    *      ),
+    *      @OA\Parameter(
+    *          name="page",
+    *          in="query",
+    *          description="Use this to page through the results if the total results found is greater than the page size.",
+    *          required=false,
+    *          @OA\Schema(
+    *              type="integer",
+    *              default=1
+    *          )
+    *      ),
+    *      @OA\Response(
+    *          response=200,
+    *          description="Successful operation",
+    *          @OA\JsonContent(
+    *              type="array",
+    *              @OA\Items(ref="#/components/schemas/News")
+    *          )
+    *      ),
+    *      @OA\Response(
+    *          response=404,
+    *          description="Not found"
+    *      ),
+    *      @OA\Response(
+    *          response=500,
+    *          description="Internal server error"
+    *      )
+    *  )
+    */
     public function index(Request $request){
 
     // Initializing variables to default values

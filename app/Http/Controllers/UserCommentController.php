@@ -7,45 +7,44 @@ use App\Models\UserComment;
 use Illuminate\Http\Request;
 
 /**
- * @OA\Tag(
- *     name="User Comments"
- * )
- */
-
+    * @OA\Tag(
+    *     name="User Comments"
+    * )
+*/
 class UserCommentController extends Controller
 {
     /**
- * @OA\Post(
- *     path="/comments",
- *     summary="Create a new comment",
- *     tags={"User Comments"},
- *     @OA\RequestBody(
- *         @OA\JsonContent(
- *             required={"commentText", "userId", "url"},
- *             @OA\Property(property="commentText", type="string"),
- *             @OA\Property(property="userId", type="string"),
- *             @OA\Property(property="url", type="string"),
- *         ),
- *     ),
- *   @OA\Response(
-     *          response=201,
-     *          description="Favourite successfully added",
-     *          @OA\JsonContent(ref="#/components/schemas/UserFavourite")
-     *      ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="Validation error",
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     *      ),
-     *      @OA\Response(
-     *          response=500,
-     *          description="Internal server error",
-     *      )
- * )
- */
+    * @OA\Post(
+    *     path="/comments",
+    *     summary="Create a new comment",
+    *     tags={"User Comments"},
+    *     @OA\RequestBody(
+    *         @OA\JsonContent(
+    *             required={"commentText", "userId", "url"},
+    *             @OA\Property(property="commentText", type="string"),
+    *             @OA\Property(property="userId", type="string"),
+    *             @OA\Property(property="url", type="string"),
+    *         ),
+    *     ),
+    *   @OA\Response(
+    *          response=201,
+    *          description="Favourite successfully added",
+    *          @OA\JsonContent(ref="#/components/schemas/UserFavourite")
+    *      ),
+    *      @OA\Response(
+    *          response=422,
+    *          description="Validation error",
+    *      ),
+    *      @OA\Response(
+    *          response=401,
+    *          description="Unauthenticated",
+    *      ),
+    *      @OA\Response(
+    *          response=500,
+    *          description="Internal server error",
+    *      )
+    * )
+    */
     public function store(Request $request)
     {
         // Validate the form fields

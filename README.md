@@ -2,7 +2,9 @@
 
 ## Overview
 
-This is a news portal app that allows users to view top headlines from the News API and search the news database for specific articles. Users can also leave comments on articles and save their favorite articles to view later. Additionally, there is an admin account that can access the admin back office to view all user information and activities.
+This is a news portal app that allows users to view top headlines from the News API and search the news database for specific articles. 
+Users can also leave comments on articles and save their favorite articles to view later. 
+Additionally, there is an admin account that can access the admin back office to view all user information and activities.
 
 ## Features
 
@@ -46,4 +48,4 @@ If you'd like to contribute to this project, please fork the repository and make
 
 ## Credits
 
-This app was created by Matej Žagar.
+This app was created by Matej Zagar.

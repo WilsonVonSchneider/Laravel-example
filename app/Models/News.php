@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class News extends Model
 {
 
-     /**
+/**
  * @OA\Schema(
  *     schema="News",
  *     type="object",

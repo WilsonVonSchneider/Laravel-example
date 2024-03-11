@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class TopHeadline extends Model
 {
-    /**
+/**
  * @OA\Schema(
  *     schema="TopHeadline",
  *     type="object",

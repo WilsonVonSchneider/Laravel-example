@@ -47,7 +47,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *     ),
  * )
  */
-
 class UserLog extends Model
 {
 

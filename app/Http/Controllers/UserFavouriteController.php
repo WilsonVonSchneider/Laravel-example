@@ -9,104 +9,65 @@ use Illuminate\Http\Request;
 use App\Models\UserFavourite;
 
 /**
- * @OA\Tag(
- *     name="User Favourites",
- *     description="Endpoints for managing user's favourite news"
- * )
- */
-
-  /**
- * @OA\Schema(
- *     schema="UserFavouriteInput",
- *     type="object",
- *     @OA\Property(
- *         property="title",
- *         type="string",
- *         example="My favourite news"
- *     ),
- *     @OA\Property(
- *         property="url",
- *         type="string",
- *         example="https://example.com/news/123"
- *     ),
- *     @OA\Property(
- *         property="author",
- *         type="string",
- *         example="John Doe"
- *     ),
- *     @OA\Property(
- *         property="description",
- *         type="string",
- *         example="This is my favourite news"
- *     ),
- *     @OA\Property(
- *         property="imageUrl",
- *         type="string",
- *         example="https://example.com/image.jpg"
- *     ),
- *     @OA\Property(
- *         property="userId",
- *         type="string",
- *         example="93504d6a-e476-48d8-be86-df361cf2c4bb"
- *     )
- * )
- */
-
+    * @OA\Tag(
+    *     name="User Favourites",
+    *     description="Endpoints for managing user's favourite news"
+    * )
+*/
 class UserFavouriteController extends Controller
 {
-     /**
-     * Display a listing of the resource.
-     *
-     * @OA\Get(
-     *      path="/favourites",
-     *      operationId="getFavourites",
-     *      tags={"User Favourites"},
-     *      summary="Get list of user's favourite news",
-     *      description="Returns list of user's favourite news",
-     *      security={{"bearerAuth":{}}},
-     *      @OA\Parameter(
-     *         name="page",
-     *         in="query",
-     *         description="Page number",
-     *         required=false,
-     *         @OA\Schema(
-     *             type="integer",
-     *             format="int64"
-     *         )
-     *      ),
-     *      @OA\Parameter(
-     *         name="perPage",
-     *         in="query",
-     *         description="Number of items per page",
-     *         required=false,
-     *         @OA\Schema(
-     *             type="integer",
-     *             format="int64"
-     *         )
-     *      ),
-     *      @OA\Response(
-     *          response=200,
-     *          description="Successful operation",
-     *          @OA\JsonContent(ref="#/components/schemas/UserFavourite")
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     *      ),
-     *      @OA\Response(
-     *          response=404,
-     *          description="Not found",
-     *      ),
-     *      @OA\Response(
-     *          response=500,
-     *          description="Internal server error",
-     *      )
-     * )
-     *
-     * @param Request $request
-     * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
-     */
-
+    /**
+    * Display a listing of the resource.
+    *
+    * @OA\Get(
+    *      path="/favourites",
+    *      operationId="getFavourites",
+    *      tags={"User Favourites"},
+    *      summary="Get list of user's favourite news",
+    *      description="Returns list of user's favourite news",
+    *      security={{"bearerAuth":{}}},
+    *      @OA\Parameter(
+    *         name="page",
+    *         in="query",
+    *         description="Page number",
+    *         required=false,
+    *         @OA\Schema(
+    *             type="integer",
+    *             format="int64"
+    *         )
+    *      ),
+    *      @OA\Parameter(
+    *         name="perPage",
+    *         in="query",
+    *         description="Number of items per page",
+    *         required=false,
+    *         @OA\Schema(
+    *             type="integer",
+    *             format="int64"
+    *         )
+    *      ),
+    *      @OA\Response(
+    *          response=200,
+    *          description="Successful operation",
+    *          @OA\JsonContent(ref="#/components/schemas/UserFavourite")
+    *      ),
+    *      @OA\Response(
+    *          response=401,
+    *          description="Unauthenticated",
+    *      ),
+    *      @OA\Response(
+    *          response=404,
+    *          description="Not found",
+    *      ),
+    *      @OA\Response(
+    *          response=500,
+    *          description="Internal server error",
+    *      )
+    * )
+    *
+    * @param Request $request
+    * @return \Illuminate\View\View|\Illuminate\Contracts\View\Factory
+    */
     public function index(Request $request)
     {
         // Initializing variables to default values
@@ -138,43 +99,43 @@ class UserFavouriteController extends Controller
         ]);
     }
 
-      /**
-     * Store a newly created resource in storage.
-     *
-     * @OA\Post(
-     *      path="/favourites",
-     *      operationId="addFavourite",
-     *      tags={"User Favourites"},
-     *      summary="Add a news to user's favourites",
-     *      description="Add a news to user's favourites",
-     *      security={{"bearerAuth":{}}},
-     *      @OA\RequestBody(
-     *          required=true,
-     *          description="Request body for adding a favourite",
-     *          @OA\JsonContent(ref="#/components/schemas/UserFavouriteInput")
-     *      ),
-     *      @OA\Response(
-     *          response=201,
-     *          description="Favourite successfully added",
-     *          @OA\JsonContent(ref="#/components/schemas/UserFavourite")
-     *      ),
-     *      @OA\Response(
-     *          response=422,
-     *          description="Validation error",
-     *      ),
-     *      @OA\Response(
-     *          response=401,
-     *          description="Unauthenticated",
-     *      ),
-     *      @OA\Response(
-     *          response=500,
-     *          description="Internal server error",
-     *      )
-     * )
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
+    /**
+    * Store a newly created resource in storage.
+    *
+    * @OA\Post(
+    *      path="/favourites",
+    *      operationId="addFavourite",
+    *      tags={"User Favourites"},
+    *      summary="Add a news to user's favourites",
+    *      description="Add a news to user's favourites",
+    *      security={{"bearerAuth":{}}},
+    *      @OA\RequestBody(
+    *          required=true,
+    *          description="Request body for adding a favourite",
+    *          @OA\JsonContent(ref="#/components/schemas/UserFavouriteInput")
+    *      ),
+    *      @OA\Response(
+    *          response=201,
+    *          description="Favourite successfully added",
+    *          @OA\JsonContent(ref="#/components/schemas/UserFavourite")
+    *      ),
+    *      @OA\Response(
+    *          response=422,
+    *          description="Validation error",
+    *      ),
+    *      @OA\Response(
+    *          response=401,
+    *          description="Unauthenticated",
+    *      ),
+    *      @OA\Response(
+    *          response=500,
+    *          description="Internal server error",
+    *      )
+    * )
+    *
+    * @param Request $request
+    * @return \Illuminate\Http\RedirectResponse
+    */
 
     public function store(Request $request)
     {
@@ -200,39 +161,38 @@ class UserFavouriteController extends Controller
     }
 
     /**
- * @OA\Delete(
- *     path="/favourites/{id}",
- *     summary="Delete a favourite item",
- *     description="Deletes a favourite item with the specified ID.",
- *     operationId="deleteFavourite",
- *     tags={"User Favourites"},
- *     @OA\Parameter(
- *         name="id",
- *         in="path",
- *         description="ID of the favourite item to delete",
- *         required=true,
- *         @OA\Schema(
- *             type="string",
- *             format="uuid",
- *             example="a110d11b-176a-4813-8c31-a69f9f50f7fc"
- *         )
- *     ),
- *     @OA\Response(
- *         response=204,
- *         description="Favourite item successfully deleted"
- *     ),
- *     @OA\Response(
- *         response=404,
- *         description="Favourite item not found"
- *     ),
- *
- *     @OA\Response(
- *          response=500,
- *          description="Internal server error",
- *      )
- * )
- */
-
+    * @OA\Delete(
+    *     path="/favourites/{id}",
+    *     summary="Delete a favourite item",
+    *     description="Deletes a favourite item with the specified ID.",
+    *     operationId="deleteFavourite",
+    *     tags={"User Favourites"},
+    *     @OA\Parameter(
+    *         name="id",
+    *         in="path",
+    *         description="ID of the favourite item to delete",
+    *         required=true,
+    *         @OA\Schema(
+    *             type="string",
+    *             format="uuid",
+    *             example="a110d11b-176a-4813-8c31-a69f9f50f7fc"
+    *         )
+    *     ),
+    *     @OA\Response(
+    *          response=204,
+    *         description="Favourite item successfully deleted"
+    *     ),
+    *     @OA\Response(
+    *         response=404,
+    *         description="Favourite item not found"
+    *     ),
+    *
+    *     @OA\Response(
+    *          response=500,
+    *          description="Internal server error",
+    *      )
+    * )
+    */
     public function destroy($id)
     {
         // Find the favourite item by its ID

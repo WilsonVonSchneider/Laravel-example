@@ -60,7 +60,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *     )
  * )
  */
-
 class UserFavourite extends Model
 {
     use HasFactory;

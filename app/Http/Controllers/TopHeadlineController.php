@@ -8,100 +8,97 @@ use App\Models\UserComment;
 use Illuminate\Http\Request;
 
 /**
- * @OA\Tag(
- *     name="Top Headlines"
- * )
- */
-
+    * @OA\Tag(
+    *     name="Top Headlines"
+    * )
+*/
 class TopHeadlineController extends Controller
 {
-        /**
-         * @OA\Get(
-         *     path="/topHeadlines",
-         *     summary="Get top headlines",
-         *     description="Return a list of top headlines from various sources with pagination and filtering options",
-         *     operationId="topHeadlines.index",
-         *     tags={"Top Headlines"},
-         *     @OA\Parameter(
-         *         name="q",
-         *         in="query",
-         *         description="Keywords or a phrase to search for in the article title and body",
-         *         required=false,
-         *         @OA\Schema(
-         *             type="string"
-         *         )
-         *     ),
-         *     @OA\Parameter(
-         *         name="sources",
-         *         in="query",
-         *         description="A comma-seperated string of identifiers for the news sources or blogs you want headlines from",
-         *         required=false,
-         *         @OA\Schema(
-         *             type="string"
-         *         )
-         *     ),
-         *     @OA\Parameter(
-         *         name="country",
-         *         in="query",
-         *         description="The 2-letter ISO 3166-1 code of the country you want to get headlines for",
-         *         required=false,
-         *         @OA\Schema(
-         *             type="string",
-         *             enum={"ae", "ar", "at", "au", "be", "bg", "br", "ca", "ch", "cn", "co", "cu", "cz", "de", "eg", "fr", "gb", "gr", "hk", "hu", "id", "ie", "il", "in", "it", "jp", "kr", "lt", "lv", "ma", "mx", "my", "ng", "nl", "no", "nz", "ph", "pl", "pt", "ro", "rs", "ru", "sa", "se", "sg", "si", "sk", "th", "tr", "tw", "ua", "us", "ve", "za"}
-         *         )
-         *     ),
-        *      @OA\Parameter(
-        *          name="category",
-        *          in="query",
-        *          description="The category you want to get headlines for",
-        *          required=false,
-        *          @OA\Schema(
-        *              type="string",
-        *              enum={"business", "entertainment", "general", "health", "science", "sports", "technology"}
-        *          )
-        *      ),
-        *      @OA\Parameter(
-        *          name="page_size",
-        *          in="query",
-        *          description="The number of results to return per page (request). 20 is the default, 100 is the maximum.",
-        *          required=false,
-        *          @OA\Schema(
-        *              type="integer",
-        *              default=20
-        *          )
-        *      ),
-        *      @OA\Parameter(
-        *          name="page",
-        *          in="query",
-        *          description="Use this to page through the results if the total results found is greater than the page size.",
-        *          required=false,
-        *          @OA\Schema(
-        *              type="integer",
-        *              default=1
-        *          )
-        *      ),
-        *      @OA\Response(
-        *          response=200,
-        *          description="Successful operation",
-        *          @OA\JsonContent(
-        *              type="array",
-        *              @OA\Items(ref="#/components/schemas/TopHeadline")
-        *          )
-        *      ),
-        *      @OA\Response(
-        *          response=404,
-        *          description="Not found"
-        *      ),
-        *      @OA\Response(
-        *          response=500,
-        *          description="Internal server error"
-        *      )
-        *  )
-        */
-
+    /**
+    * @OA\Get(
+    *     path="/topHeadlines",
+    *     summary="Get top headlines",
+    *     description="Return a list of top headlines from various sources with pagination and filtering options",
+    *     operationId="topHeadlines.index",
+    *     tags={"Top Headlines"},
+    *     @OA\Parameter(
+    *         name="q",
+    *         in="query",
+    *         description="Keywords or a phrase to search for in the article title and body",
+    *         required=false,
+    *         @OA\Schema(
+    *             type="string"
+    *         )
+    *     ),
+    *     @OA\Parameter(
+    *         name="sources",
+    *         in="query",
+    *         description="A comma-seperated string of identifiers for the news sources or blogs you want headlines from",
+    *         required=false,
+    *         @OA\Schema(
+    *             type="string"
+    *         )
+    *     ),
+    *     @OA\Parameter(
+    *         name="country",
+    *         in="query",
+    *         description="The 2-letter ISO 3166-1 code of the country you want to get headlines for",
+    *         required=false,
+    *         @OA\Schema(
+    *             type="string",
+    *             enum={"ae", "ar", "at", "au", "be", "bg", "br", "ca", "ch", "cn", "co", "cu", "cz", "de", "eg", "fr", "gb", "gr", "hk", "hu", "id", "ie", "il", "in", "it", "jp", "kr", "lt", "lv", "ma", "mx", "my", "ng", "nl", "no", "nz", "ph", "pl", "pt", "ro", "rs", "ru", "sa", "se", "sg", "si", "sk", "th", "tr", "tw", "ua", "us", "ve", "za"}
+    *         )
+    *     ),
+    *      @OA\Parameter(
+    *          name="category",
+    *          in="query",
+    *          description="The category you want to get headlines for",
+    *          required=false,
+    *          @OA\Schema(
+    *              type="string",
+    *              enum={"business", "entertainment", "general", "health", "science", "sports", "technology"}
+    *          )
+    *      ),
+    *      @OA\Parameter(
+    *          name="page_size",
+    *          in="query",
+    *          description="The number of results to return per page (request). 20 is the default, 100 is the maximum.",
+    *          required=false,
+    *          @OA\Schema(
+    *              type="integer",
+    *              default=20
+    *          )
+    *      ),
+    *      @OA\Parameter(
+    *          name="page",
+    *          in="query",
+    *          description="Use this to page through the results if the total results found is greater than the page size.",
+    *          required=false,
+    *          @OA\Schema(
+    *              type="integer",
+    *              default=1
+    *          )
+    *      ),
+    *      @OA\Response(
+    *          response=200,
+    *          description="Successful operation",
+    *          @OA\JsonContent(
+    *              type="array",
+    *              @OA\Items(ref="#/components/schemas/TopHeadline")
+    *          )
+    *      ),
+    *      @OA\Response(
+    *          response=404,
+    *          description="Not found"
+    *      ),
+    *      @OA\Response(
+    *          response=500,
+    *          description="Internal server error"
+    *      )
+    *  )
+    */
     public function index(Request $request)
     {
-
         // Initializing variables to default values
         $page = null;
         $q = null;

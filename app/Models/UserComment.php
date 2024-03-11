@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Traits\UUID;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 /**
  * @OA\Schema(
  *     schema="UserComment",
@@ -51,7 +52,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *)
  * )
  */
-
 class UserComment extends Model
 {
 
